@@ -1,0 +1,525 @@
+#root {
+  min-height: 100vh;
+  background: #0e0e0e;
+  color: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0e0e0e;
+  color: #ffffff;
+}
+
+button,
+textarea {
+  font-family: inherit;
+}
+
+/* =========================
+   COMMON
+========================= */
+
+.home-page,
+.create-page {
+  width: min(100%, 900px);
+  margin: 0 auto;
+  padding: 42px 20px 130px;
+  color: #ffffff;
+}
+
+.home-page h1,
+.home-page h2,
+.home-page h3,
+.create-page h1,
+.create-page h2,
+.create-page h3 {
+  color: #ffffff;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: #b7ff3c;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* =========================
+   HOME HERO
+========================= */
+
+.hero-section {
+  margin-bottom: 46px;
+  text-align: center;
+}
+
+.hero-section h1 {
+  margin: 0 0 22px;
+  color: #ffffff;
+  font-size: clamp(36px, 7vw, 62px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.streak-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  width: fit-content;
+  margin: 0 auto 22px;
+  padding: 14px 22px;
+  border: 1px solid #363636;
+  border-radius: 6px;
+  background: #151515;
+  text-align: left;
+}
+
+.streak-card span {
+  font-size: 30px;
+}
+
+.streak-card strong {
+  display: block;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.streak-card p {
+  margin: 3px 0 0;
+  color: #a9a9a9;
+}
+
+.start-button {
+  width: min(100%, 520px);
+  padding: 18px 24px;
+  border: none;
+  border-radius: 6px;
+  background: #b7ff3c;
+  color: #0e0e0e;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease;
+}
+
+.start-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #c7ff67;
+}
+
+.start-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* =========================
+   TODAY'S WORKOUT
+========================= */
+
+.workout-section {
+  margin-bottom: 42px;
+}
+
+.section-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 22px;
+  text-align: center;
+}
+
+.section-heading h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 27px;
+  font-weight: 850;
+}
+
+.sentence-count {
+  color: #999999;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.sentence-list {
+  display: grid;
+  gap: 12px;
+}
+
+.sentence-card {
+  display: grid;
+  grid-template-columns: 44px 1fr 48px;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #343434;
+  border-radius: 7px;
+  background: #151515;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.sentence-number {
+  color: #b7ff3c;
+  font-weight: 900;
+}
+
+.sentence-text h3 {
+  margin: 0 0 6px;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.sentence-text p {
+  margin: 0;
+  color: #a9a9a9;
+  line-height: 1.55;
+}
+
+.listen-button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #414141;
+  border-radius: 5px;
+  background: #202020;
+  color: #ffffff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.listen-button:hover {
+  border-color: #b7ff3c;
+  background: #252d1a;
+}
+
+.active-sentence {
+  border-color: #b7ff3c;
+  background: #1a2112;
+  transform: translateY(-1px);
+}
+
+.active-sentence .sentence-text h3 {
+  color: #b7ff3c;
+}
+
+/* =========================
+   EMPTY WORKOUT
+========================= */
+
+.empty-deck-card {
+  padding: 34px 24px;
+  border: 1px solid #343434;
+  border-radius: 7px;
+  background: #151515;
+  color: #ffffff;
+  text-align: center;
+}
+
+.empty-deck-card .eyebrow {
+  margin-bottom: 12px;
+  color: #b7ff3c;
+}
+
+.empty-deck-card h2 {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.empty-deck-card p {
+  margin: 0;
+  color: #a9a9a9;
+  line-height: 1.7;
+}
+
+/* =========================
+   HOME BOTTOM CARD
+========================= */
+
+.customize-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  padding: 28px;
+  border: 1px solid #3e4a28;
+  border-radius: 7px;
+  background: #161c10;
+  color: #ffffff;
+}
+
+.customize-card h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 25px;
+}
+
+.customize-card > div > p:last-child {
+  max-width: 520px;
+  margin: 10px 0 0;
+  color: #b6b6b6;
+  line-height: 1.7;
+}
+
+.customize-button {
+  flex-shrink: 0;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 5px;
+  background: #b7ff3c;
+  color: #101010;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.customize-button:hover {
+  background: #c7ff67;
+}
+
+/* =========================
+   CREATE PAGE
+========================= */
+
+.create-page {
+  width: min(100%, 760px);
+}
+
+.create-hero {
+  margin-bottom: 28px;
+}
+
+.create-hero h1 {
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-size: clamp(36px, 7vw, 58px);
+  font-weight: 900;
+  letter-spacing: -2px;
+}
+
+.create-hero > p:last-child {
+  margin: 0;
+  color: #a9a9a9;
+}
+
+.phrase-form-card,
+.ai-generate-card {
+  padding: 26px;
+  border: 1px solid #343434;
+  border-radius: 7px;
+  background: #151515;
+  color: #ffffff;
+}
+
+.phrase-form-card {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.phrase-form-card label {
+  margin-top: 8px;
+  color: #ffffff;
+  font-weight: 850;
+}
+
+.phrase-form-card textarea {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #414141;
+  border-radius: 5px;
+  outline: none;
+  resize: vertical;
+  background: #191919;
+  color: #ffffff;
+  font: inherit;
+  line-height: 1.6;
+}
+
+.phrase-form-card textarea::placeholder {
+  color: #717171;
+}
+
+.phrase-form-card textarea:focus {
+  border-color: #b7ff3c;
+}
+
+.save-phrase-button {
+  margin-top: 12px;
+  padding: 17px 20px;
+  border: none;
+  border-radius: 5px;
+  background: #b7ff3c;
+  color: #101010;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease;
+}
+
+.save-phrase-button:hover {
+  transform: translateY(-2px);
+  background: #c7ff67;
+}
+
+.save-message {
+  margin: 4px 0 0;
+  color: #b7ff3c;
+  font-weight: 850;
+  text-align: center;
+}
+
+.ai-generate-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  border-color: #3e4a28;
+  background: #161c10;
+}
+
+.ai-generate-card h2 {
+  margin: 0 0 8px;
+  color: #ffffff;
+}
+
+.ai-generate-card p:last-child {
+  margin-bottom: 0;
+  color: #b6b6b6;
+}
+
+.ai-generate-card button {
+  flex-shrink: 0;
+  padding: 14px 18px;
+  border: 1px solid #4a5b2b;
+  border-radius: 5px;
+  background: #29331c;
+  color: #8ca65c;
+  font-weight: 850;
+  cursor: not-allowed;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
+  .home-page,
+  .create-page {
+    padding: 30px 16px 120px;
+  }
+
+  .hero-section {
+    margin-bottom: 38px;
+  }
+
+  .hero-section h1 {
+    font-size: 42px;
+    letter-spacing: -1.5px;
+  }
+
+  .streak-card {
+    width: min(100%, 330px);
+  }
+
+  .section-heading {
+    align-items: center;
+    text-align: center;
+  }
+
+  .sentence-card {
+    grid-template-columns: 32px 1fr 42px;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .sentence-text h3 {
+    font-size: 17px;
+  }
+
+  .listen-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .customize-card,
+  .ai-generate-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .customize-card,
+  .phrase-form-card,
+  .ai-generate-card {
+    padding: 20px;
+  }
+
+  .customize-button {
+    width: 100%;
+  }
+}
+.logo {
+  margin: 0 0 30px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: white;
+}
+.customize-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.logo-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #b8ff3b;
+  box-shadow: 0 0 18px rgba(184, 255, 59, 0.6);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.9;
+}
+
+.logo-text span:first-child {
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  color: #ffffff;
+}
+
+.logo-text span:last-child {
+  font-size: 46px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: #ffffff;
+}
