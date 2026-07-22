@@ -10,7 +10,7 @@ export default defineConfig({
       includeAssets: ["favicon.svg"],
       manifest: {
         name: "English Builder",
-        short_name: "Builder",
+        short_name: "English Builder",
         description: "Language Training App",
         theme_color: "#111111",
         background_color: "#111111",
