@@ -3,6 +3,7 @@ import {
   DndContext,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   closestCenter,
   useSensor,
   useSensors,
@@ -23,7 +24,13 @@ function Library() {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 6,
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 8,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -98,7 +105,7 @@ function Library() {
         width: "min(100%, 760px)",
         margin: "0 auto",
         color: "#ffffff",
-        padding: "40px 20px 120px",
+        padding: "40px 16px 120px",
       }}
     >
       <p
@@ -130,11 +137,11 @@ function Library() {
           margin: "0 0 28px",
           color: "#8f8f8f",
           fontSize: "13px",
-          lineHeight: "1.5",
+          lineHeight: "1.6",
           textAlign: "center",
         }}
       >
-        左の「≡」をつかんで、好きな順番に並べ替え
+        カードを少し長押しして、好きな順番に並べ替え
       </p>
 
       {phrases.length === 0 ? (
@@ -160,7 +167,7 @@ function Library() {
             <div
               style={{
                 display: "grid",
-                gap: "10px",
+                gap: "12px",
               }}
             >
               {phrases.map((phrase) => (

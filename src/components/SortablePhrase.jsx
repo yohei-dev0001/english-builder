@@ -17,56 +17,40 @@ function SortablePhrase({
     id: phrase.id,
   });
 
+  function stopDrag(event) {
+    event.stopPropagation();
+  }
+
   const sortableStyle = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.55 : 1,
+    opacity: isDragging ? 0.6 : 1,
     zIndex: isDragging ? 10 : "auto",
   };
 
   return (
-   <article
-  ref={setNodeRef}
-  {...attributes}
-  {...listeners}
-  style={{ 
+    <article
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={{
         ...sortableStyle,
         display: "grid",
-        gridTemplateColumns: "42px minmax(0, 1fr) auto",
-        alignItems: "center",
-        gap: "12px",
-        padding: "14px",
+        gap: "16px",
+        padding: "18px",
         border: isDragging
           ? "1px solid #b7ff3c"
           : "1px solid #343434",
-        borderRadius: "8px",
+        borderRadius: "12px",
         background: isDragging ? "#1c2414" : "#151515",
         boxShadow: isDragging
-          ? "0 14px 32px rgba(0, 0, 0, 0.4)"
+          ? "0 16px 36px rgba(0, 0, 0, 0.45)"
           : "none",
-        touchAction: "none",
+        cursor: isDragging ? "grabbing" : "grab",
+        touchAction: "pan-y",
+        userSelect: "none",
       }}
     >
-      <button
-        type="button"
-        aria-label={`${phrase.english}を並び替える`}
-        style={{
-          width: "42px",
-          height: "42px",
-          padding: 0,
-          border: "1px solid #353535",
-          borderRadius: "6px",
-          background: "#1d1d1d",
-          color: "#b7ff3c",
-          fontSize: "22px",
-          lineHeight: 1,
-          cursor: isDragging ? "grabbing" : "grab",
-          touchAction: "none",
-        }}
-      >
-        ≡
-      </button>
-
       <div
         style={{
           minWidth: 0,
@@ -74,11 +58,14 @@ function SortablePhrase({
       >
         <h2
           style={{
-            margin: "0 0 5px",
+            margin: "0 0 8px",
             color: "#ffffff",
-            fontSize: "19px",
+            fontSize: "21px",
+            fontWeight: "800",
             lineHeight: "1.35",
-            overflowWrap: "anywhere",
+            textAlign: "left",
+            overflowWrap: "break-word",
+            wordBreak: "normal",
           }}
         >
           {phrase.english}
@@ -87,10 +74,12 @@ function SortablePhrase({
         <p
           style={{
             margin: 0,
-            color: "#999999",
-            fontSize: "14px",
-            lineHeight: "1.5",
-            overflowWrap: "anywhere",
+            color: "#a3a3a3",
+            fontSize: "15px",
+            lineHeight: "1.6",
+            textAlign: "left",
+            overflowWrap: "break-word",
+            wordBreak: "normal",
           }}
         >
           {phrase.japanese}
@@ -101,49 +90,54 @@ function SortablePhrase({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "8px",
+          justifyContent: "space-between",
+          gap: "10px",
         }}
       >
         <button
           type="button"
+          onPointerDown={stopDrag}
+          onTouchStart={stopDrag}
           onClick={() => onToggleWorkout(phrase.id)}
           style={{
-            minWidth: "126px",
-            padding: "10px 12px",
+            flex: 1,
+            minHeight: "44px",
+            padding: "10px 14px",
             border: phrase.isOnHome
               ? "1px solid #b7ff3c"
               : "1px solid transparent",
-            borderRadius: "5px",
+            borderRadius: "8px",
             background: phrase.isOnHome
               ? "#1a2112"
               : "#b7ff3c",
             color: phrase.isOnHome
               ? "#b7ff3c"
               : "#101010",
-            fontSize: "12px",
+            fontSize: "13px",
             fontWeight: "900",
             cursor: "pointer",
             whiteSpace: "nowrap",
           }}
         >
-          {phrase.isOnHome
-            ? "✓ IN WORKOUT"
-            : "＋ WORKOUT"}
+          {phrase.isOnHome ? "✓ WORKOUT" : "＋ WORKOUT"}
         </button>
 
         <button
           type="button"
+          onPointerDown={stopDrag}
+          onTouchStart={stopDrag}
           onClick={() => onDelete(phrase.id)}
           aria-label={`${phrase.english}を削除`}
           style={{
-            width: "38px",
-            height: "38px",
+            width: "44px",
+            height: "44px",
+            flexShrink: 0,
             padding: 0,
             border: "1px solid #3b3b3b",
-            borderRadius: "5px",
+            borderRadius: "8px",
             background: "#1c1c1c",
             color: "#999999",
-            fontSize: "16px",
+            fontSize: "17px",
             cursor: "pointer",
           }}
         >
