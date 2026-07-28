@@ -4,6 +4,8 @@ import { getPhrases } from "../data/storage";
 function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
+  const [speechRate, setSpeechRate] = useState(0.8);
+  const [repeatCount, setRepeatCount] = useState(1);
 
   const allPhrases = getPhrases();
 
@@ -11,15 +13,27 @@ function Home() {
     (phrase) => phrase.isOnHome
   );
 
+  function wait(milliseconds) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, milliseconds);
+    });
+  }
+
   function speakEnglish(text) {
     window.speechSynthesis.cancel();
 
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-US";
-    speech.rate = 0.8;
-    speech.pitch = 1;
+    return new Promise((resolve) => {
+      const speech = new SpeechSynthesisUtterance(text);
 
-    window.speechSynthesis.speak(speech);
+      speech.lang = "en-US";
+      speech.rate = speechRate;
+      speech.pitch = 1;
+
+      speech.onend = resolve;
+      speech.onerror = resolve;
+
+      window.speechSynthesis.speak(speech);
+    });
   }
 
   async function startShadowing() {
@@ -29,11 +43,20 @@ function Home() {
 
     for (let index = 0; index < sentences.length; index += 1) {
       setCurrentIndex(index);
-      speakEnglish(sentences[index].english);
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, 3500);
-      });
+      for (
+        let repeatIndex = 0;
+        repeatIndex < repeatCount;
+        repeatIndex += 1
+      ) {
+        await speakEnglish(sentences[index].english);
+
+        if (repeatIndex < repeatCount - 1) {
+          await wait(900);
+        }
+      }
+
+      await wait(1500);
     }
 
     setCurrentIndex(null);
@@ -44,13 +67,14 @@ function Home() {
     <main className="home-page">
       <section className="hero-section">
         <div className="logo">
-  <span className="logo-dot"></span>
+          <span className="logo-dot"></span>
 
-  <span className="logo-text">
-    <span>ENGLISH</span>
-    <span>BUILDER</span>
-  </span>
-</div>
+          <span className="logo-text">
+            <span>ENGLISH</span>
+            <span>BUILDER</span>
+          </span>
+        </div>
+
         <div className="streak-card">
           <span>🔥</span>
 
@@ -69,6 +93,97 @@ function Home() {
             ? "🎧 SHADOWING..."
             : "▶ START SHADOWING"}
         </button>
+
+        <div className="shadowing-settings">
+          <div className="setting-group">
+            <p className="setting-label">SPEED</p>
+
+            <div className="setting-buttons">
+              <button
+                type="button"
+                className={
+                  speechRate === 0.5 ? "active" : ""
+                }
+                onClick={() => setSpeechRate(0.5)}
+                disabled={isPlaying}
+              >
+                0.5x
+              </button>
+
+              <button
+                type="button"
+                className={
+                  speechRate === 0.8 ? "active" : ""
+                }
+                onClick={() => setSpeechRate(0.8)}
+                disabled={isPlaying}
+              >
+                0.8x
+              </button>
+
+              <button
+                type="button"
+                className={
+                  speechRate === 1 ? "active" : ""
+                }
+                onClick={() => setSpeechRate(1)}
+                disabled={isPlaying}
+              >
+                1.0x
+              </button>
+
+              <button
+                type="button"
+                className={
+                  speechRate === 1.2 ? "active" : ""
+                }
+                onClick={() => setSpeechRate(1.2)}
+                disabled={isPlaying}
+              >
+                1.2x
+              </button>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <p className="setting-label">REPEAT</p>
+
+            <div className="setting-buttons">
+              <button
+                type="button"
+                className={
+                  repeatCount === 1 ? "active" : ""
+                }
+                onClick={() => setRepeatCount(1)}
+                disabled={isPlaying}
+              >
+                ×1
+              </button>
+
+              <button
+                type="button"
+                className={
+                  repeatCount === 2 ? "active" : ""
+                }
+                onClick={() => setRepeatCount(2)}
+                disabled={isPlaying}
+              >
+                ×2
+              </button>
+
+              <button
+                type="button"
+                className={
+                  repeatCount === 3 ? "active" : ""
+                }
+                onClick={() => setRepeatCount(3)}
+                disabled={isPlaying}
+              >
+                ×3
+              </button>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="workout-section">
@@ -123,6 +238,7 @@ function Home() {
                   onClick={() =>
                     speakEnglish(sentence.english)
                   }
+                  disabled={isPlaying}
                   aria-label={`${sentence.english}を再生`}
                 >
                   🔊
