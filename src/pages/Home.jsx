@@ -3,7 +3,7 @@ import { getPhrases, savePhrases } from "../data/storage";
 
 import {
   DndContext,
-  PointerSensor,
+  MouseSensor,
   TouchSensor,
   closestCenter,
   useSensor,
@@ -26,14 +26,14 @@ function Home() {
   const [phrases, setPhrases] = useState(getPhrases());
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {
+    useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: 6,
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 250,
+        delay: 220,
         tolerance: 8,
       },
     })
@@ -57,7 +57,7 @@ function Home() {
 
   function wait(milliseconds) {
     return new Promise((resolve) => {
-      setTimeout(resolve, milliseconds);
+      window.setTimeout(resolve, milliseconds);
     });
   }
 
@@ -81,7 +81,11 @@ function Home() {
   function handleDragEnd(event) {
     const { active, over } = event;
 
-    if (!over || active.id === over.id || isPlaying) {
+    if (
+      isPlaying ||
+      !over ||
+      active.id === over.id
+    ) {
       return;
     }
 
@@ -103,7 +107,7 @@ function Home() {
       newIndex
     );
 
-    const workoutOrderMap = new Map(
+    const orderById = new Map(
       reorderedWorkout.map((phrase, index) => [
         phrase.id,
         index,
@@ -111,13 +115,13 @@ function Home() {
     );
 
     const updatedPhrases = phrases.map((phrase) => {
-      if (!workoutOrderMap.has(phrase.id)) {
+      if (!orderById.has(phrase.id)) {
         return phrase;
       }
 
       return {
         ...phrase,
-        workoutOrder: workoutOrderMap.get(phrase.id),
+        workoutOrder: orderById.get(phrase.id),
       };
     });
 
@@ -126,34 +130,38 @@ function Home() {
   }
 
   async function startShadowing() {
-    if (isPlaying || sentences.length === 0) return;
+    if (isPlaying || sentences.length === 0) {
+      return;
+    }
 
     setIsPlaying(true);
 
-    for (
-      let index = 0;
-      index < sentences.length;
-      index += 1
-    ) {
-      setCurrentIndex(index);
-
+    try {
       for (
-        let repeatIndex = 0;
-        repeatIndex < repeatCount;
-        repeatIndex += 1
+        let index = 0;
+        index < sentences.length;
+        index += 1
       ) {
-        await speakEnglish(sentences[index].english);
+        setCurrentIndex(index);
 
-        if (repeatIndex < repeatCount - 1) {
-          await wait(900);
+        for (
+          let repeatIndex = 0;
+          repeatIndex < repeatCount;
+          repeatIndex += 1
+        ) {
+          await speakEnglish(sentences[index].english);
+
+          if (repeatIndex < repeatCount - 1) {
+            await wait(900);
+          }
         }
+
+        await wait(1500);
       }
-
-      await wait(1500);
+    } finally {
+      setCurrentIndex(null);
+      setIsPlaying(false);
     }
-
-    setCurrentIndex(null);
-    setIsPlaying(false);
   }
 
   return (
@@ -178,6 +186,7 @@ function Home() {
         </div>
 
         <button
+          type="button"
           className="start-button"
           onClick={startShadowing}
           disabled={isPlaying || sentences.length === 0}
@@ -192,49 +201,19 @@ function Home() {
             <p className="setting-label">SPEED</p>
 
             <div className="setting-buttons">
-              <button
-                type="button"
-                className={
-                  speechRate === 0.5 ? "active" : ""
-                }
-                onClick={() => setSpeechRate(0.5)}
-                disabled={isPlaying}
-              >
-                0.5x
-              </button>
-
-              <button
-                type="button"
-                className={
-                  speechRate === 0.8 ? "active" : ""
-                }
-                onClick={() => setSpeechRate(0.8)}
-                disabled={isPlaying}
-              >
-                0.8x
-              </button>
-
-              <button
-                type="button"
-                className={
-                  speechRate === 1 ? "active" : ""
-                }
-                onClick={() => setSpeechRate(1)}
-                disabled={isPlaying}
-              >
-                1.0x
-              </button>
-
-              <button
-                type="button"
-                className={
-                  speechRate === 1.2 ? "active" : ""
-                }
-                onClick={() => setSpeechRate(1.2)}
-                disabled={isPlaying}
-              >
-                1.2x
-              </button>
+              {[0.5, 0.8, 1, 1.2].map((rate) => (
+                <button
+                  type="button"
+                  key={rate}
+                  className={
+                    speechRate === rate ? "active" : ""
+                  }
+                  onClick={() => setSpeechRate(rate)}
+                  disabled={isPlaying}
+                >
+                  {rate.toFixed(1)}x
+                </button>
+              ))}
             </div>
           </div>
 
@@ -242,38 +221,19 @@ function Home() {
             <p className="setting-label">REPEAT</p>
 
             <div className="setting-buttons">
-              <button
-                type="button"
-                className={
-                  repeatCount === 1 ? "active" : ""
-                }
-                onClick={() => setRepeatCount(1)}
-                disabled={isPlaying}
-              >
-                ×1
-              </button>
-
-              <button
-                type="button"
-                className={
-                  repeatCount === 2 ? "active" : ""
-                }
-                onClick={() => setRepeatCount(2)}
-                disabled={isPlaying}
-              >
-                ×2
-              </button>
-
-              <button
-                type="button"
-                className={
-                  repeatCount === 3 ? "active" : ""
-                }
-                onClick={() => setRepeatCount(3)}
-                disabled={isPlaying}
-              >
-                ×3
-              </button>
+              {[1, 2, 3].map((count) => (
+                <button
+                  type="button"
+                  key={count}
+                  className={
+                    repeatCount === count ? "active" : ""
+                  }
+                  onClick={() => setRepeatCount(count)}
+                  disabled={isPlaying}
+                >
+                  ×{count}
+                </button>
+              ))}
             </div>
           </div>
         </div>
@@ -316,7 +276,7 @@ function Home() {
                 textAlign: "center",
               }}
             >
-              カードを少し長押しして並べ替え
+              緑の番号を少し長押しして並べ替え
             </p>
 
             <DndContext
