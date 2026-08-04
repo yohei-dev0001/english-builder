@@ -10,8 +10,9 @@ function migrateData(phrases) {
     createdAt: phrase.createdAt ?? Date.now(),
 
     // 将来追加する項目
-    folderId: phrase.folderId ?? null,
-    xp: phrase.xp ?? 0,
+  folderId: phrase.folderId ?? null,
+xp: phrase.xp ?? 0,
+workoutOrder: phrase.workoutOrder ?? null,
   }));
 }
 
