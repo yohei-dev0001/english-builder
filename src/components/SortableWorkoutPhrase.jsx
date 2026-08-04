@@ -20,59 +20,49 @@ function SortableWorkoutPhrase({
     disabled: isPlaying,
   });
 
-  const cardStyle = {
+  function stopDrag(event) {
+    event.stopPropagation();
+  }
+
+  function preventSelection(event) {
+    event.preventDefault();
+  }
+
+  const sortableStyle = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.65 : 1,
+    opacity: isDragging ? 0.6 : 1,
     zIndex: isDragging ? 20 : "auto",
-    position: "relative",
-    touchAction: "pan-y",
-    boxShadow: isDragging
-      ? "0 16px 36px rgba(0, 0, 0, 0.45)"
-      : undefined,
   };
 
   return (
     <article
       ref={setNodeRef}
+      {...attributes}
+      {...listeners}
       className={`sentence-card ${
         active ? "active-sentence" : ""
       }`}
-      style={cardStyle}
+      onContextMenu={preventSelection}
+      onSelectStart={preventSelection}
+      style={{
+        ...sortableStyle,
+        position: "relative",
+        cursor: isDragging ? "grabbing" : "grab",
+        touchAction: "pan-y",
+        WebkitTouchCallout: "none",
+        WebkitUserSelect: "none",
+        userSelect: "none",
+        boxShadow: isDragging
+          ? "0 16px 36px rgba(0, 0, 0, 0.45)"
+          : "none",
+      }}
     >
-      <button
-        type="button"
-        className="sentence-number"
-        {...attributes}
-        {...listeners}
-        disabled={isPlaying}
-        aria-label={`${phrase.english}を並べ替える`}
-        onContextMenu={(event) => event.preventDefault()}
-        style={{
-          padding: 0,
-          border: "none",
-          background: "transparent",
-          color: "#b7ff3c",
-          font: "inherit",
-          fontWeight: "900",
-          cursor: isDragging ? "grabbing" : "grab",
-
-          touchAction: "none",
-          WebkitTouchCallout: "none",
-          WebkitUserSelect: "none",
-          userSelect: "none",
-        }}
-      >
+      <span className="sentence-number">
         {String(index + 1).padStart(2, "0")}
-      </button>
+      </span>
 
-      <div
-        className="sentence-text"
-        style={{
-          WebkitUserSelect: "text",
-          userSelect: "text",
-        }}
-      >
+      <div className="sentence-text">
         <h3>{phrase.english}</h3>
         <p>{phrase.japanese}</p>
       </div>
@@ -80,6 +70,8 @@ function SortableWorkoutPhrase({
       <button
         type="button"
         className="listen-button"
+        onPointerDown={stopDrag}
+        onTouchStart={stopDrag}
         onClick={() => onListen(phrase.english)}
         disabled={isPlaying}
         aria-label={`${phrase.english}を再生`}
