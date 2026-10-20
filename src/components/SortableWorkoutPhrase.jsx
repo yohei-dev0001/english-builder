@@ -7,6 +7,8 @@ function SortableWorkoutPhrase({
   active,
   isPlaying,
   onListen,
+  showEnglish = true,
+  showJapanese = true,
 }) {
   const {
     attributes,
@@ -63,8 +65,13 @@ function SortableWorkoutPhrase({
       </span>
 
       <div className="sentence-text">
-        <h3>{phrase.english}</h3>
-        <p>{phrase.japanese}</p>
+        {showEnglish && <h3>{phrase.english}</h3>}
+
+        {showJapanese && <p>{phrase.japanese}</p>}
+
+        {!showEnglish && !showJapanese && (
+          <p>🎧 音声だけで練習</p>
+        )}
       </div>
 
       <button
@@ -74,7 +81,7 @@ function SortableWorkoutPhrase({
         onTouchStart={stopDrag}
         onClick={() => onListen(phrase.english)}
         disabled={isPlaying}
-        aria-label={`${phrase.english}を再生`}
+        aria-label={`フレーズ${index + 1}を再生`}
       >
         🔊
       </button>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getPhrases, savePhrases } from "../data/storage";
 
 import {
@@ -23,7 +23,49 @@ function Home() {
   const [currentIndex, setCurrentIndex] = useState(null);
   const [speechRate, setSpeechRate] = useState(0.8);
   const [repeatCount, setRepeatCount] = useState(1);
-  const [phrases, setPhrases] = useState(getPhrases());
+  const [phrases, setPhrases] = useState(getPhrases);
+
+  const [showEnglish, setShowEnglish] = useState(() => {
+    try {
+      return (
+        localStorage.getItem("english-builder-show-english") !== "false"
+      );
+    } catch {
+      return true;
+    }
+  });
+
+  const [showJapanese, setShowJapanese] = useState(() => {
+    try {
+      return (
+        localStorage.getItem("english-builder-show-japanese") !== "false"
+      );
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        "english-builder-show-english",
+        String(showEnglish)
+      );
+    } catch {
+      // 保存できない場合も表示の切り替えは利用できます。
+    }
+  }, [showEnglish]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        "english-builder-show-japanese",
+        String(showJapanese)
+      );
+    } catch {
+      // 保存できない場合も表示の切り替えは利用できます。
+    }
+  }, [showJapanese]);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -81,11 +123,7 @@ function Home() {
   function handleDragEnd(event) {
     const { active, over } = event;
 
-    if (
-      isPlaying ||
-      !over ||
-      active.id === over.id
-    ) {
+    if (isPlaying || !over || active.id === over.id) {
       return;
     }
 
@@ -237,6 +275,39 @@ function Home() {
             </div>
           </div>
         </div>
+
+        <div
+          className="shadowing-settings"
+          style={{ marginTop: "16px" }}
+        >
+          <div className="setting-group">
+            <p className="setting-label">表示設定</p>
+
+            <div className="setting-buttons">
+              <button
+                type="button"
+                className={showEnglish ? "active" : ""}
+                onClick={() =>
+                  setShowEnglish((current) => !current)
+                }
+                aria-pressed={showEnglish}
+              >
+                英語 {showEnglish ? "ON" : "OFF"}
+              </button>
+
+              <button
+                type="button"
+                className={showJapanese ? "active" : ""}
+                onClick={() =>
+                  setShowJapanese((current) => !current)
+                }
+                aria-pressed={showJapanese}
+              >
+                日本語 {showJapanese ? "ON" : "OFF"}
+              </button>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="workout-section">
@@ -276,7 +347,7 @@ function Home() {
                 textAlign: "center",
               }}
             >
-              緑の番号を少し長押しして並べ替え
+              カードをドラッグ、スマホは少し長押しして並べ替え
             </p>
 
             <DndContext
@@ -299,6 +370,8 @@ function Home() {
                       active={currentIndex === index}
                       isPlaying={isPlaying}
                       onListen={speakEnglish}
+                      showEnglish={showEnglish}
+                      showJapanese={showJapanese}
                     />
                   ))}
                 </div>
